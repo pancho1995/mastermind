@@ -1,0 +1,75 @@
+/*naslov*/
+.div-title {
+    color: yellow;
+    background-color: blue;
+    font-family: fantasy;
+    text-align: center;
+    font-size: 40px;
+}
+
+.body {
+    height: 100%;
+    width: 60%;
+    background-color: blue;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+/*svaki od td-ova u tabeli za popunjavanje*/
+.td {
+    width: 49px;
+    height: 49px;
+    display: inline-block;
+    position: relative;
+    border-radius: 25px;
+    background-color: rgb(50, 79, 135);
+}
+
+.result {
+    width: 49px;
+    height: 49px;
+    display: inline-block;
+    position: relative;
+    border-radius: 25px;
+    background-color: rgb(50, 79, 135);
+}
+
+.pictureElement {
+    background-color: blue;
+    display: inline-block;
+    margin-top: 300px;
+    margin-left: 10px;
+}
+
+.imgClass {
+    height: 50px;
+    width: 50px;
+}
+
+.table-right{
+    float: right;
+}
+
+.table-left{
+    float: left;
+}
+
+.elements{
+    margin-top: 300px;
+    background-color: yellow;
+}
+
+.deleteDiv{
+    background-color: red;
+}
+
+.row-1{
+    width: 49px;
+    height: 49px;
+    display: inline-block;
+    position: relative;
+    border-radius: 25px;
+    background-color: rgb(50, 79, 135);
+}
+
+
