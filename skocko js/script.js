@@ -196,22 +196,27 @@ btn.addEventListener('click', delete_object());
 //-------------------------------------------------CALCULATE HITS------------------------------------------------//
 
 const calculate = () => {
-
+    //checking red hits
     for (let i = 0; i < combination_user.length; i++) {
         for (let j = 0; j < combination_cpu.length; j++) {
             //red hit
-            if(i == j && combination_user[i] == combination_cpu[j]){
-                combination_cpu[j] = -1 
+            if (i == j && combination_user[i] == combination_cpu[j]) {
+                combination_cpu[j] = -1
                 combination_user[i] = -1
                 hit_red++;
                 break;
             }
-            //yellow hit
+
+        }
+    }
+    //checking yellow hits
+    for (let i = 0; i < combination_user.length; i++) {
+        for (let j = 0; j < combination_cpu.length; j++) {
             //dont check red
-            if(combination_cpu[j] != -1 && combination_user[i] != -1){
-                //check if they are yellow
-                if(combination_cpu[j] === combination_user[i]){
-                    combinationCPU[j] = -1;
+            if (combination_cpu[j] != -1 && combination_user[i] != -1) {
+                //yellow hit
+                if (combination_cpu[j] === combination_user[i]) {
+                    combination_cpu[j] = -1;
                     hit_yellow++;
                     break;
                 }
