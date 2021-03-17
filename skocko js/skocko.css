@@ -8,10 +8,12 @@
 }
 
 .body {
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-image: url("background.jpg");
     height: 100%;
     width: 100%;
-    background-image: url("background.jpg");
-
 }
 
 .column-left {
@@ -28,20 +30,22 @@
     height: 60px;
     display: inline-block;
     position: relative;
-    border-radius: 30px;
+    border-radius: 50px;
     margin-left: 5px;
     opacity: 0.3;
-    background-color: rgb(122, 109, 161);
+    background-color: rgb(106, 126, 150);
+    border: 1px solid #4434e0
 }
-
-.td-fill {
+.center {
     width: 60px;
     height: 60px;
     display: inline-block;
     position: relative;
-    border-radius: 30px;
+    border-radius: 50px;
     margin-left: 5px;
-    background-color: rgb(122, 109, 161);
+    opacity: 0.3;
+    background-color: rgb(106, 126, 150);
+    border: 1px solid #4434e0
 }
 .column-center {
     width: 100%;
@@ -55,9 +59,11 @@
     height: 60px;
     display: inline-block;
     position: relative;
-    border-radius: 30px;
+    border-radius: 50px;
     opacity: 0.3   ;
-    background-color: rgb(122, 109, 161);
+    background-color: rgb(106, 126, 150);
+    margin-left: 5px;
+    border: 1px solid #4434e0
 }
 #img{
     height: 60px;
@@ -81,6 +87,22 @@
 
 .column-center {
     width: 100%;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.float-left{
+    width: 50%;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    float:left
+}
+
+.float-right{
+    width: 50%;
     justify-content: center;
     margin: 0;
     padding: 0;

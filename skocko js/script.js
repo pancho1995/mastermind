@@ -1,6 +1,6 @@
 //------------------------------------------------GET FROM DOM------------------------------------------------//
 const $ = e => document.querySelector(e);
-const $$ = e => document.querySelectorAll(e); 
+const $$ = e => document.querySelectorAll(e);
 //----------------------------------------------ARRAY OF OBJECTS----------------------------------------------//
 const objects = [
     //smiley
@@ -40,22 +40,27 @@ const objects = [
         value: 6
     }
 ];
-//--------------------------------------------------VARIABLES--------------------------------------------------//
+//--------------------------------------------------VARIABLES-------------------------------------------------//
 const arrayOfSymbols = $$('.pictureElement'); //get all div objects of class pictureElement
 const arrayOfResults = $$('.result');         //get all div objects of class result
 const arrayOfPictures = $$('.imgClass');      //get all dom objects of class imgClass
+const arrayOfCenter = $$('.center');          //get all dom objects of class center
 const arrayOfBoxes = $$('.td');               //get all dom objects of class td
 const btn_delete = $('#btn');                 //delete button
 
 let row_counter = 1;                          //counter for rows
 let column_counter = 0;                       //counter for cols 
 let index_left = 0;                           //counter for left table 
-let index_right = 0;                           //brojac za desnu tabelu
+let index_right = 0;                          //counter for right table
 let hit_yellow = 0;                           //yellow hits counter
 let hit_red = 0;                              //red hits counter
 let combination_user = [];                    //users combination
-//----------------------------------------------------DELETE---------------------------------------------------//
-const deleteObject = function() {   
+let win = false;
+let lost = false;
+let wrong = new Audio('wrong.wav');           //audio effect for wrong combination
+let correct = new Audio('correct.mp3');       //audio effect for correct combination
+//----------------------------------------------------DELETE--------------------------------------------------//
+const deleteObject = function () {
     //prevent deleting after result check
     switch (index_left) {
         case 0:
@@ -81,12 +86,15 @@ const deleteObject = function() {
             break;
         default:
             //delete last added
-            arrayOfBoxes[index_left-1].innerHTML = '';
+            arrayOfBoxes[index_left - 1].innerHTML = ''; //delete element from box
+            arrayOfBoxes[index_left - 1].style.opacity = 0.3; //update opacity if deleted
+            combination_user.pop() //delete from user combination
             index_left--;
+            column_counter--;
             break;
     }
 }
-//--------------------------------------------DROP RANDOM COMBINATION--------------------------------------------//
+//-------------------------------------------DROP RANDOM COMBINATION------------------------------------------//
 //drops random numbers between 1 and 5
 const symbol_1 = objects[Math.floor(Math.random() * 6)];
 const symbol_2 = objects[Math.floor(Math.random() * 6)];
@@ -101,31 +109,33 @@ let combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
 
 console.log(symbol_1.value + '-' + symbol_2.value + '-' + symbol_3.value + '-' + symbol_4.value + ' :CPU')
 
-//--------------------------------------------------ADD ELEMENT--------------------------------------------------//
+//-------------------------------------------------ADD ELEMENT------------------------------------------------//
 
 //go through elements of div-elements
 arrayOfSymbols.forEach(element => {
-
     element.addEventListener('click', () => {
-
         for (let index = 0; index < arrayOfBoxes.length; index++) {
             //check if div is empty
             var stringFromHTML = arrayOfBoxes[index].innerHTML.trim();
-
-            if (stringFromHTML == '') {
+            //if box is empty add element
+            if (stringFromHTML == '' && !win && !lost) {
                 //update objects picture in left table
                 arrayOfBoxes[index].innerHTML = `${element.innerHTML}`;
+                arrayOfBoxes[index].style.opacity = 1;
                 index_left++;
-
                 //update user combination array
-                combination_user[column_counter] = getObject(element);
-                column_counter++;
-
+                if(combination_user.length < 4){
+                    combination_user[column_counter] = getObject(element);
+                    column_counter++;
+                }else{
+                    return;
+                }
                 //when user reach the end of array check result
                 if (index_left !== 0 && index_left % 4 === 0) {
-                    updateResult();
+                    calculate();
+                    paint();
+                    gameOverWin();
                     emptyArray(combination_user);
-                    paint();  
                     combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
                     column_counter = 0;
                     row_counter++;
@@ -139,13 +149,13 @@ arrayOfSymbols.forEach(element => {
 });
 
 //------------------------------------------------EMPTY AN ARRAY----------------------------------------------//
-const emptyArray = function(array) {
+const emptyArray = function (array) {
     for (let index = array.length; index >= 0; index--) {
         array.splice(index, 1);
     }
 }
 //--------------------------------------------GET VALUE FROM ELEMENT------------------------------------------//
-const getObject = function(element) {
+const getObject = function (element) {
     switch (element.id) {
         case 'smiley':
             return objects[0]
@@ -171,10 +181,11 @@ const getObject = function(element) {
     }
 }
 //-----------------------------------------------DELETE BUTTON------------------------------------------------//
-btn_delete.addEventListener('click', deleteObject); 
+btn_delete.addEventListener('click', deleteObject);
 //can call like this deleteObject as it is defined as method without arrow function
 //-----------------------------------------------CALCULATE HITS-----------------------------------------------//
-const calculate = function(){
+const calculate = function () {
+    console.log(combination_user.length + 'duzina')
     //checking red hits
     for (let i = 0; i < combination_user.length; i++) {
         for (let j = 0; j < combination_cpu.length; j++) {
@@ -195,6 +206,7 @@ const calculate = function(){
                 //yellow hit
                 if (combination_cpu[j] === combination_user[i]) {
                     combination_cpu[j] = -1;
+
                     hit_yellow++;
                     break;
                 }
@@ -203,38 +215,66 @@ const calculate = function(){
     }
 }
 //------------------------------------------------UPDATE RESULTS----------------------------------------------//
-const updateResult = function() {
-    calculate();
+const fillCenter = function () {
+
+    for (let i = 0; i < combination.length; i++) {
+        for (let j = 0; j < arrayOfCenter.length; j++) {
+            if(i === j){
+                arrayOfCenter[j].innerHTML = `<img src = "${combination[i].img}"; width= 60px; height = 60px>`
+                arrayOfCenter[j].style.opacity = 1;
+            }
+        }
+    }
 }
 //-------------------------------------------------GAME WIN/OVER----------------------------------------------//
-
+const gameOverWin = function () {
+    if (hit_red === 4) {
+        win = true;
+        fillCenter();
+    }
+    if (index_right === 24 && hit_red < 4) {
+        lost = true;
+        fillCenter();
+    }
+}
 //--------------------------------------------------GAME RESET------------------------------------------------//
-const resetGame = function() {
-    
+const gameReset = function () {
+
 }
 //----------------------------------------------------PAINT---------------------------------------------------//
-const paint = function(){
-    if(index_left !== 0 && index_left % 4 === 0){
+const paint = function () {
+    if (index_left !== 0 && index_left % 4 === 0) {
         //check reds
         let i = 0;
-        while(i < hit_red){
+        while (i < hit_red) {
             arrayOfResults[index_right].style = "background-color: red";
+            arrayOfResults[index_right].style.opacity = 1;
             i++;
             index_right++;
         }
         //check yellows
         let j = 0;
-        while(j < hit_yellow){
+        while (j < hit_yellow) {
             arrayOfResults[index_right].style = "background-color: yellow";
+            arrayOfResults[index_right].style.opacity = 1;
             j++;
-            index_right++
+            index_right++;
         }
         //check emptys
         let z = 0;
-        while(z < 4 -(hit_yellow + hit_red)){
+        while (z < 4 - (hit_yellow + hit_red)) {
             index_right++;
             z++;
         }
+        playSound();
+    }
+}
+//-------------------------------------------------PLAY SOUND-------------------------------------------------//
+const playSound = function() {
+    if(hit_red === 4){
+        correct.play();
+    }else{
+        wrong.play();
     }
 }
 
