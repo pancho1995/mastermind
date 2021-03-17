@@ -1,5 +1,7 @@
+//------------------------------------------------GET FROM DOM------------------------------------------------//
+const $ = e => document.querySelector(e);
+const $$ = e => document.querySelectorAll(e); 
 //----------------------------------------------ARRAY OF OBJECTS----------------------------------------------//
-
 const objects = [
     //smiley
     smiley = {
@@ -30,52 +32,30 @@ const objects = [
         img: "clubs.png",
         element: document.querySelector('#clubs'),
         value: 5
+    },
+    //star
+    star = {
+        img: "star.png",
+        element: document.querySelector('#star'),
+        value: 6
     }
 ];
-
 //--------------------------------------------------VARIABLES--------------------------------------------------//
+const arrayOfSymbols = $$('.pictureElement'); //get all div objects of class pictureElement
+const arrayOfResults = $$('.result');         //get all div objects of class result
+const arrayOfPictures = $$('.imgClass');      //get all dom objects of class imgClass
+const arrayOfBoxes = $$('.td');               //get all dom objects of class td
+const btn_delete = $('#btn');                 //delete button
 
-//pokupi sve div elemente sa klasom '.pictureElement'
-const arrayOfSymbols = document.querySelectorAll('.pictureElement');
-
-//delete button
-const btn = document.querySelector('#btn');
-
-//pokupi sve elemente slike
-const arrayOfPictures = document.querySelectorAll('.imgClass');
-
-//pokupi sve div elemente sa klasom '.td'
-const arrayOfBoxes = document.querySelectorAll('.td');
-
-//counter for rows
-let rowCounter = 1;
-
-//counter for cols 
-let columnCounter = 0;
-
-//alfa i omega!!!
-let index_left = 0;
-
-//pokupi sve div elemente sa klasom result
-const arrayOfResults = document.querySelectorAll('.result');
-
-//brojac za desnu tabelu
-let rightIndex = 0;
-
-//count yellow hits
-let hit_yellow = 0;
-
-//count red hits
-let hit_red = 0;
-
-//users combination
-let combination_user = [];
-
-
+let row_counter = 1;                          //counter for rows
+let column_counter = 0;                       //counter for cols 
+let index_left = 0;                           //counter for left table 
+let index_right = 0;                           //brojac za desnu tabelu
+let hit_yellow = 0;                           //yellow hits counter
+let hit_red = 0;                              //red hits counter
+let combination_user = [];                    //users combination
 //----------------------------------------------------DELETE---------------------------------------------------//
-
-const delete_object = () => {
-
+const deleteObject = function() {   
     //prevent deleting after result check
     switch (index_left) {
         case 0:
@@ -96,21 +76,22 @@ const delete_object = () => {
         case 20:
             return;
             break;
+        case 24:
+            return;
+            break;
         default:
             //delete last added
-            arrayOfBoxes[index_left - 1].innerHTML = '';
+            arrayOfBoxes[index_left-1].innerHTML = '';
             index_left--;
             break;
     }
 }
-
 //--------------------------------------------DROP RANDOM COMBINATION--------------------------------------------//
-
 //drops random numbers between 1 and 5
-const symbol_1 = objects[Math.floor(Math.random() * 5)];
-const symbol_2 = objects[Math.floor(Math.random() * 5)];
-const symbol_3 = objects[Math.floor(Math.random() * 5)];
-const symbol_4 = objects[Math.floor(Math.random() * 5)];
+const symbol_1 = objects[Math.floor(Math.random() * 6)];
+const symbol_2 = objects[Math.floor(Math.random() * 6)];
+const symbol_3 = objects[Math.floor(Math.random() * 6)];
+const symbol_4 = objects[Math.floor(Math.random() * 6)];
 
 //put those objects in array
 const combination = [symbol_1, symbol_2, symbol_3, symbol_4];
@@ -137,16 +118,17 @@ arrayOfSymbols.forEach(element => {
                 index_left++;
 
                 //update user combination array
-                combination_user[columnCounter] = getObject(element);
-                columnCounter++;
+                combination_user[column_counter] = getObject(element);
+                column_counter++;
 
                 //when user reach the end of array check result
                 if (index_left !== 0 && index_left % 4 === 0) {
                     updateResult();
                     emptyArray(combination_user);
+                    paint();  
                     combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
-                    columnCounter = 0;
-                    rowCounter++;
+                    column_counter = 0;
+                    row_counter++;
                     hit_yellow = 0;
                     hit_red = 0;
                 }
@@ -157,16 +139,13 @@ arrayOfSymbols.forEach(element => {
 });
 
 //------------------------------------------------EMPTY AN ARRAY----------------------------------------------//
-
-const emptyArray = (array) => {
+const emptyArray = function(array) {
     for (let index = array.length; index >= 0; index--) {
         array.splice(index, 1);
     }
 }
-
-//-------------------------------------------GET VALUE FROM ELEMENT-------------------------------------------//
-
-const getObject = (element) => {
+//--------------------------------------------GET VALUE FROM ELEMENT------------------------------------------//
+const getObject = function(element) {
     switch (element.id) {
         case 'smiley':
             return objects[0]
@@ -183,19 +162,19 @@ const getObject = (element) => {
         case 'clubs':
             return objects[4]
             break;
+        case 'star':
+            return objects[5]
+            break;
         default:
             return -1;
             break;
     }
 }
-
-//-------------------------------------------------DELETE BUTTON-------------------------------------------------//
-
-btn.addEventListener('click', delete_object());
-
-//-------------------------------------------------CALCULATE HITS------------------------------------------------//
-
-const calculate = () => {
+//-----------------------------------------------DELETE BUTTON------------------------------------------------//
+btn_delete.addEventListener('click', deleteObject); 
+//can call like this deleteObject as it is defined as method without arrow function
+//-----------------------------------------------CALCULATE HITS-----------------------------------------------//
+const calculate = function(){
     //checking red hits
     for (let i = 0; i < combination_user.length; i++) {
         for (let j = 0; j < combination_cpu.length; j++) {
@@ -206,7 +185,6 @@ const calculate = () => {
                 hit_red++;
                 break;
             }
-
         }
     }
     //checking yellow hits
@@ -223,14 +201,42 @@ const calculate = () => {
             }
         }
     }
-
-    console.log('red:' + hit_red)
-    console.log('yellow:' + hit_yellow)
 }
-
-//-------------------------------------------------UPDATE RESULTS------------------------------------------------//
-const updateResult = () => {
+//------------------------------------------------UPDATE RESULTS----------------------------------------------//
+const updateResult = function() {
     calculate();
 }
+//-------------------------------------------------GAME WIN/OVER----------------------------------------------//
+
+//--------------------------------------------------GAME RESET------------------------------------------------//
+const resetGame = function() {
+    
+}
+//----------------------------------------------------PAINT---------------------------------------------------//
+const paint = function(){
+    if(index_left !== 0 && index_left % 4 === 0){
+        //check reds
+        let i = 0;
+        while(i < hit_red){
+            arrayOfResults[index_right].style = "background-color: red";
+            i++;
+            index_right++;
+        }
+        //check yellows
+        let j = 0;
+        while(j < hit_yellow){
+            arrayOfResults[index_right].style = "background-color: yellow";
+            j++;
+            index_right++
+        }
+        //check emptys
+        let z = 0;
+        while(z < 4 -(hit_yellow + hit_red)){
+            index_right++;
+            z++;
+        }
+    }
+}
+
 
 
