@@ -55,45 +55,10 @@ let index_right = 0;                          //counter for right table
 let hit_yellow = 0;                           //yellow hits counter
 let hit_red = 0;                              //red hits counter
 let combination_user = [];                    //users combination
-let win = false;
+let win = false;                                
 let lost = false;
 let wrong = new Audio('wrong.wav');           //audio effect for wrong combination
 let correct = new Audio('correct.mp3');       //audio effect for correct combination
-//----------------------------------------------------DELETE--------------------------------------------------//
-const deleteObject = function () {
-    //prevent deleting after result check
-    switch (index_left) {
-        case 0:
-            return;
-            break;
-        case 4:
-            return;
-            break;
-        case 8:
-            return;
-            break;
-        case 12:
-            return;
-            break;
-        case 16:
-            return;
-            break;
-        case 20:
-            return;
-            break;
-        case 24:
-            return;
-            break;
-        default:
-            //delete last added
-            arrayOfBoxes[index_left - 1].innerHTML = ''; //delete element from box
-            arrayOfBoxes[index_left - 1].style.opacity = 0.3; //update opacity if deleted
-            combination_user.pop() //delete from user combination
-            index_left--;
-            column_counter--;
-            break;
-    }
-}
 //-------------------------------------------DROP RANDOM COMBINATION------------------------------------------//
 //drops random numbers between 1 and 5
 const symbol_1 = objects[Math.floor(Math.random() * 6)];
@@ -108,9 +73,7 @@ const combination = [symbol_1, symbol_2, symbol_3, symbol_4];
 let combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
 
 console.log(symbol_1.value + '-' + symbol_2.value + '-' + symbol_3.value + '-' + symbol_4.value + ' :CPU')
-
 //-------------------------------------------------ADD ELEMENT------------------------------------------------//
-
 //go through elements of div-elements
 arrayOfSymbols.forEach(element => {
     element.addEventListener('click', () => {
@@ -147,7 +110,41 @@ arrayOfSymbols.forEach(element => {
         }
     })
 });
-
+//----------------------------------------------------DELETE--------------------------------------------------//
+const deleteObject = function () {
+    //prevent deleting after result check
+    switch (index_left) {
+        case 0:
+            return;
+            break;
+        case 4:
+            return;
+            break;
+        case 8:
+            return;
+            break;
+        case 12:
+            return;
+            break;
+        case 16:
+            return;
+            break;
+        case 20:
+            return;
+            break;
+        case 24:
+            return;
+            break;
+        default:
+            //delete last added
+            arrayOfBoxes[index_left - 1].innerHTML = ''; //delete element from box
+            arrayOfBoxes[index_left - 1].style.opacity = 0.3; //update opacity if deleted
+            combination_user.pop() //delete from user combination
+            index_left--; //update index_left
+            column_counter--; //update column_counter
+            break;
+    }
+}
 //------------------------------------------------EMPTY AN ARRAY----------------------------------------------//
 const emptyArray = function (array) {
     for (let index = array.length; index >= 0; index--) {
@@ -185,7 +182,6 @@ btn_delete.addEventListener('click', deleteObject);
 //can call like this deleteObject as it is defined as method without arrow function
 //-----------------------------------------------CALCULATE HITS-----------------------------------------------//
 const calculate = function () {
-    console.log(combination_user.length + 'duzina')
     //checking red hits
     for (let i = 0; i < combination_user.length; i++) {
         for (let j = 0; j < combination_cpu.length; j++) {
@@ -216,7 +212,6 @@ const calculate = function () {
 }
 //------------------------------------------------UPDATE RESULTS----------------------------------------------//
 const fillCenter = function () {
-
     for (let i = 0; i < combination.length; i++) {
         for (let j = 0; j < arrayOfCenter.length; j++) {
             if(i === j){
