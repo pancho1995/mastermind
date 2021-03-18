@@ -10,10 +10,9 @@
 .body {
     background-size: auto;
     background-repeat: no-repeat;
-    background-position: left top;
-    background-image: url("background.jpg");
-    height: 100%;
-    width: 100%;
+    background-position: stretch;
+    background-image: url("background.jfif");
+
 }
 
 .column-left {

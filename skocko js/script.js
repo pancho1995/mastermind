@@ -202,7 +202,6 @@ const calculate = function () {
                 //yellow hit
                 if (combination_cpu[j] === combination_user[i]) {
                     combination_cpu[j] = -1;
-
                     hit_yellow++;
                     break;
                 }
