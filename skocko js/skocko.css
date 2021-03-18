@@ -11,7 +11,7 @@
     background-size: auto;
     background-repeat: no-repeat;
     background-position: stretch;
-    background-image: url("background.jfif");
+    background-image: url("background.jpg");
 
 }
 
@@ -33,7 +33,7 @@
     margin-left: 5px;
     opacity: 0.3;
     background-color: rgb(106, 126, 150);
-    border: 1px solid #4434e0
+    border: 1px solid #182e52
 }
 .center {
     width: 60px;
@@ -44,7 +44,7 @@
     margin-left: 5px;
     opacity: 0.3;
     background-color: rgb(106, 126, 150);
-    border: 1px solid #4434e0
+    border: 1px solid #182e52
 }
 .column-center {
     width: 100%;
@@ -62,7 +62,7 @@
     opacity: 0.3   ;
     background-color: rgb(106, 126, 150);
     margin-left: 5px;
-    border: 1px solid #4434e0
+    border: 1px solid #182e52
 }
 #img{
     height: 60px;

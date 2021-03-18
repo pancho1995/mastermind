@@ -55,24 +55,34 @@ let index_right = 0;                          //counter for right table
 let hit_yellow = 0;                           //yellow hits counter
 let hit_red = 0;                              //red hits counter
 let combination_user = [];                    //users combination
-let win = false;                                
-let lost = false;
+let win = false;                              //user win
+let lost = false;                             //user lose
 let wrong = new Audio('wrong.wav');           //audio effect for wrong combination
 let correct = new Audio('correct.mp3');       //audio effect for correct combination
+const combination = [];                       //cpus random combination
+let combination_cpu = []                      //cpus random combination for modification
 //-------------------------------------------DROP RANDOM COMBINATION------------------------------------------//
-//drops random numbers between 1 and 5
-const symbol_1 = objects[Math.floor(Math.random() * 6)];
-const symbol_2 = objects[Math.floor(Math.random() * 6)];
-const symbol_3 = objects[Math.floor(Math.random() * 6)];
-const symbol_4 = objects[Math.floor(Math.random() * 6)];
-
-//put those objects in array
-const combination = [symbol_1, symbol_2, symbol_3, symbol_4];
-
-//copy of combination array to modify
-let combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
-
-console.log(symbol_1.value + '-' + symbol_2.value + '-' + symbol_3.value + '-' + symbol_4.value + ' :CPU')
+const dropCombination = function(){
+    for (let i = 0; i < 4; i++) {
+        let symbol = Math.floor(Math.random() * 6);
+       combination[i] = objects[symbol];
+       combination_cpu[i] = objects[symbol];
+    }
+}
+dropCombination();
+let show = "";
+//print
+for (let index = 0; index < combination.length; index++) {
+    show += combination[index].value + "-"
+}
+console.log('CPU: ' + show)
+//------------------------------------------------REMAKE ARRAY------------------------------------------------//
+const remakeArray = function(){
+    for (let i = 0; i < combination_cpu.length; i++) {
+        //copy cpus combination
+        combination_cpu[i] = combination[i];
+    }
+}
 //-------------------------------------------------ADD ELEMENT------------------------------------------------//
 //go through elements of div-elements
 arrayOfSymbols.forEach(element => {
@@ -99,7 +109,7 @@ arrayOfSymbols.forEach(element => {
                     paint();
                     gameOverWin();
                     emptyArray(combination_user);
-                    combination_cpu = [symbol_1, symbol_2, symbol_3, symbol_4];
+                    remakeArray();
                     column_counter = 0;
                     row_counter++;
                     hit_yellow = 0;
